@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Homework 8 of Yuehui Wang</title>
+
+    <link href="bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap-3.3.5-dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+    <script src="bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://openlayers.org/en/v3.10.1/css/ol.css" type="text/css">
+    <script src="http://openlayers.org/api/OpenLayers.js"></script>
+    <script src="./moment.js"></script>
+    <script src="./moment-timezone.js"></script>
+    <!---<script src="http://openlayers.org/en/v3.10.1/build/ol.js" type="text/javascript"></script>-->
+
+    <style>
+      html, body {
+        background: url('images/bg.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+      }
+
+      font.alert_msg {
+        color: red;
+        font-weight: bold;
+      }
+
+      div#board {
+        background-color: rgba(0, 0, 0, 0.15);
+      }
+
+      div.title {
+        text-align: center;
+      }
+
+      div#div_pb {
+        margin-right: 2px;
+      }
+
+      form#input_form {
+        margin : 20px 20px 20px 20px;
+      }
+
+      font.white {
+        color: white;
+      }
+
+      font.white_1 {
+        font-size: 12px;
+        color: white;
+        font-weight: bold;
+      }
+
+      font.white_2 {
+        font-size: 14px;
+        color: white;
+      }
+
+      font.red_1 {
+        font-weight: bold;
+        color: red;
+      }
+
+      h5#occupier {
+        color: rgba(0, 0, 0, 0);
+      }
+
+      .nav-tabs li.active a,
+      .nav-tabs li.active a:hover,
+      .nav-tabs li.active a:focus {
+        background-color: rgb(73, 112, 169);
+        color: white;
+      }
+
+      .nav-tabs li a,
+      .nav-tabs li a:hover,
+      .nav-tabs li a:focus {
+        background-color: rgb(238, 239, 239);
+        color: rgb(78, 121, 182);
+      }
+
+      .tab1_title {
+        background-color: rgb(242, 126, 127);
+      }
+
+      .tab1_oddline {
+        background-color: white;
+      }
+
+      .tab1_evenline {
+        background-color: rgb(242, 222, 222);
+      }
+
+      td {
+        height: 40px;
+      }
+
+      font.bold {
+        font-weight: bold;
+      }
+
+      font.huge {
+        font-size: 80px;
+      }
+
+      font.small {
+        vertical-align: 150%;
+        font-size: 20px;
+      }
+
+      font.blue {
+        color: blue;
+      }
+
+      font.green {
+        color: green;
+      }
+
+      .align_center {
+        vertical-align: center;
+        text-align: center;
+      }
+
+      td ,th, tr, div{
+        border: 0px solid black;
+      }
+
+      .tab2_contenttable {
+        margin: 0px;
+        padding: 0px;
+        background-color: white;
+      }
+
+      .bgc_white {
+        background-color: white;
+      }
+
+      .collapsed_div {
+        background-color: rgb(243, 243, 243);
+      }
+
+      .tab2_collapsed_table_header {
+        background-color: white;
+      }
+
+      .tab2_collapsed_table {
+        padding: 10px 10px 10px 10px;
+      }
+
+      .tab2_header {
+        background-color: rgb(48, 113, 169);
+        font-weight: bold;
+        color: white;
+      }
+
+      .tab3_tuple1 {
+        background-color: rgb(54, 125, 181);
+      }
+
+      .tab3_tuple2 {
+        background-color: rgb(236, 68, 68);
+      }
+
+      .tab3_tuple3 {
+        background-color: rgb(229, 141, 79);
+      }
+
+      .tab3_tuple4 {
+        background-color: rgb(167, 164, 57);
+      }
+
+      .tab3_tuple5 {
+        background-color: rgb(151, 112, 167);
+      }
+
+      .tab3_tuple6 {
+        background-color: rgb(243, 124, 126);
+      }
+
+      .tab3_tuple7 {
+        background-color: rgb(206, 69, 113);
+      }
+
+      .tab3_weekdays {
+        font-size: 12px;
+        font-weight: bold;
+        color: white;
+      }
+
+      .tab3_day {
+        font-size: 12px;
+        font-weight: bold;
+        color: white;
+      }
+
+      .tab3_temp_title {
+        color: white;
+      }
+
+      .tab3_temp {
+        font-size: 20px;
+        font-weight: bold;
+        color: white;
+      }
+
+      .tab3_tuple {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 5px;
+        margin-right: 5px;
+        height: 300px;
+        border-radius: 5px;
+      }
+
+      .no_padding {
+        padding: 0px;
+      }
+
+      .small_padding {
+        padding: 0px;
+      }
+
+      @media only screen and (min-width: 769px){
+        .tab3_bgc {
+          background-color: rgb(48, 53, 58);
+          height: 320px;
+        }
+
+        .tab3_weekdays {
+          font-size: 8px;
+          font-weight: bold;
+          color: white;
+        }
+      }
+      /*
+      .olImageLoadError {
+        background: url('images/noMap.jpg');
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+      }
+      */
+    </style>
+
+    <script type="text/javascript">
+
+
+      function isHidden(el) {
+        return (el.offsetParent === null);
+      }
+
+      function checkSA() {
+        if ($('#input_submit_clicked').val() == "0")
+        {
+          if ($("#input_sa").val() === "") {
+            if ($('#filled_sa').val() === "1")
+            {
+              $("#alert_sa").show();
+              $('#filled_sa').val("0");
+            }
+          }
+          else {
+            $("#alert_sa").hide();
+            $('#filled_sa').val("1");
+          }
+        }
+        else {
+          $('#alert_sa').hide();
+        }
+      }
+
+      function checkCity() {
+        if (document.getElementById('input_submit_clicked').value === "0")
+        {
+          if ($("#input_city").val() === "") {
+            if ($('#filled_city').val() === "1")
+            {
+              $("#alert_city").show();
+              $("#filled_city").val("0");
+            }
+          }
+          else {
+            $("#alert_city").hide();
+            $('#filled_city').val("1");
+          }
+        }
+        else {
+          $('#alert_city').hide();
+        }
+      }
+
+      function checkStates() {
+        if (document.getElementById('input_submit_clicked').value === "0")
+        {
+          //alert($("#input_states").val());
+          if ($("#input_states").val() === "Empty") {
+            if ($('#filled_states').val() === "1")
+            {
+              $("#alert_states").show();
+              $("#filled_states").val("0");
+            }
+          }
+          else {
+            $("#alert_states").hide();
+            $("#filled_states").val("1");
+          }
+        }
+        else {
+          $('#alert_states').hide();
+        }
+      }
+
+      function submitForm() {
+        //alert("submitForm entered!");
+        //SetInitValue();
+        //document.getElementById('input_submitted').value = "1";
+        document.getElementById('input_submit_clicked').value = "1";
+        if (document.getElementById('input_F').checked) {
+          document.getElementById('input_unit').value = "us";
+        }
+        else {
+          document.getElementById('input_unit').value = "si";
+        }
+
+        checkSA();
+        checkCity();
+        checkStates();
+        /*
+        var sa = document.getElementById('alert_sa');
+        var city = document.getElementById('alert_city');
+        var states = document.getElementById('alert_states');
+        if (isHidden(sa) && isHidden(city) && isHidden(states)) {
+          return true;
+        }
+        */
+        //document.getElementById('input_submitted').value = "0";
+        return false;
+      }
+
+      function resetInputs() {
+        document.getElementById('input_sa').value = "";
+        document.getElementById('input_city').value = "";
+        document.getElementById('statesEmpty').selected = "true";
+        document.getElementById('input_F').checked = true;
+        document.getElementById('input_C').checked = false;
+        document.getElementById('input_submitted').value = "0";
+        document.getElementById('input_submit_clicked').value = "0";
+        $("#alert_sa").hide();
+        $("#alert_city").hide();
+        $("#alert_states").hide();
+        $('#div_result').html("");
+        $('#input_form').validate().resetForm();
+      }
+
+      function SetInitValue()
+      {
+        document.getElementById("input_sa").value = "University of Pittsburgh";
+        document.getElementById("input_city").value = "Pittsburgh";
+        document.getElementById("input_states").selectedIndex = 39;
+      }
+
+      var states = ["AL", "Alabama", "AK", "Alaska", "AZ", "Arizona", "AR", "Arkansas", "CA", "California", "CO", "Colorado", "CT", "Connecticut", "DE", "Delaware", "DC", "District Of Columbia", "FL", "Florida", "GA", "Georgia", "HI", "Hawaii", "ID", "Idaho", "IL", "Illinois", "IN", "Indiana", "IA", "Iowa", "KS", "Kansas", "KY", "Kentucky", "LA", "Louisiana", "ME", "Maine", "MD", "Maryland", "MA", "Massachusetts", "MI", "Michigan", "MN", "Minnesota", "MS", "Mississippi", "MO", "Missouri", "MT", "Montana", "NE", "Nebraska", "NV", "Nevada", "NH", "New Hampshire", "NJ", "New Jersey", "NM", "New Mexico", "NY", "New York", "NC", "North Carolina", "ND", "North Dakota", "OH", "Ohio", "OK", "Oklahoma", "OR", "Oregon", "PA", "Pennsylvania", "RI", "Rhode Island", "SC", "South Carolina", "SD", "South Dakota", "TN", "Tennessee", "TX", "Texas", "UT", "Utah", "VT", "Vermont", "VA", "Virginia", "WA", "Washington", "WV", "West Virginia", "WI", "Wisconsin", "WY", "Wyoming",];
+      function WriteStates()
+      {
+        var str = "<select name = \"input_states\" id = \"input_states\" class = \"form-control\" onchange = \"checkStates()\">\n"
+        str += "<option value = \"Empty\" id = \"statesEmpty\">Select your state..</option>\n";
+        var selectedState = "";
+        for (var i = 0; i < states.length/2; i++)
+        {
+          //console.log("<option value = \"" + states[i*2] + "\"" + ((selectedState == states[i*2])? (" selected ") : ("")) + ">" + states[i*2 + 1] + "</option>\n");
+          str += "<option value = \"" + states[i*2] + "\"" + ((selectedState == states[i*2])? (" selected ") : ("")) + ">" + states[i*2 + 1] + "</option>\n";
+        }
+        str += "</select>\n";
+        str += "<p hidden id = \"alert_states\"><font class = \"red_1\">Please select a state</font></p>";
+        document.getElementById('div_select').innerHTML = str;
+
+        document.getElementById('line').width = document.getElementById('board').width;
+
+      }
+
+      function sendAjaxRequest() {
+        //alert($('#input_FC').val());
+        $.ajax({
+          url: './back_end.php',
+          data: {
+            sa: $('#input_sa').val(),
+            city: $('#input_city').val(),
+            states: $('#input_states').val(),
+            unit: $('#input_unit').val()
+          },
+          dataType: "json",
+          type: 'GET',
+          success: function(output) {
+            //parse the data here
+            //alert("success!");
+            ShowResult(output);
+          },
+          error: function() {
+            console.log('sendAjaxRequest error');
+          }
+        });
+        return false;
+      }
+
+      function GetTimeStr(time, timezone) {
+        var d = new Date(time * 1000);
+        if (moment.tz.zone(timezone) == null) {
+          timezone = "America/Los_Angeles";
+        }
+        var obj = {year : d.getFullYear(), month : d.getMonth(), day : d.getDate(), hour : d.getHours(), minute : d.getMinutes(), second : 0, millisecond : 0};
+        var s = d.getFullYear() + "-" + (d.getMonth() < 10 ? "0" : "") + d.getMonth() + "-" + (d.getDate() < 10 ? "0" : "") + d.getDate() + " "
+          + (d.getHours() < 10 ? "0" : "") + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" : "") + d.getMinutes() + ":00";
+        var s1 = d.toUTCString();
+        var s2 = d.toLocaleString();
+        var sp = (d.getHours() < 10 ? "0" : "") + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" : "") + d.getMinutes() + ":00";
+        var m = moment(sp, "America/Los_Angeles");
+        var mobj = moment(obj, "America/Los_Angeles");
+        m = m.tz(timezone);
+        return m.format();
+        //"HH:mm A z"
+      }
+
+      function ShowResult(output) {
+        var city = $('#input_city').val();
+        var state = $('#input_states').val();
+        var lat = output.latitude;
+        var lng = output.longitude;
+        var icon = output.currently.icon;
+        var timezone = output.timezone;
+        var summary = output.currently.summary;
+        var temperature = Math.round(output.currently.temperature);
+        var temperatureMax = Math.round(output.daily.data[0].temperatureMax);
+        var temperatureMin = Math.round(output.daily.data[0].temperatureMin);
+        var sunriseTime = output.daily.data[0].sunriseTime;
+        var sunsetTime = output.daily.data[0].sunsetTime;
+        var precipIntensity = output.currently.precipIntensity;
+        var precipProbability = Math.round(output.currently.precipProbability * 100);
+        var dewPoint = Math.round(output.currently.dewPoint * 100) / 100.0;
+        var humidity = Math.round(output.currently.humidity * 100);
+        var windSpeed = Math.round(output.currently.windSpeed * 100) / 100.0;
+        var visibility = Math.round(output.currently.visibility * 100) / 100.0;
+        //var sunriseStr = GetDateStr(sunriseTime * 1000);
+        //var sunsetStr = GetDateStr(sunsetTime * 1000);
+        var sunriseStr = sunriseTime;
+        var sunsetStr = sunsetTime;
+
+        function GetDateStr(time)
+        {
+          var date = new Date(time);
+          var hour = date.getHours();
+          var minute = date.getMinutes();
+          var suffix = "";
+          if (hour >= 12) {
+            hour -= 12;
+            suffix = " PM";
+          }
+          else {
+            suffix = " AM";
+          }
+          if (hour == 0)
+          {
+            hour = 12;
+          }
+          if (hour < 10) {
+            hour = "0" + hour;
+          }
+          if (minute < 10) {
+            minute = "0" + minute;
+          }
+          return hour + ':' + minute + suffix;
+        }
+
+        //var timezone = output.timezone;
+        //date_default_timezone_set(timezone);
+
+        if ($('#input_F').is(':checked')) {
+          var unit_fc = "F";
+          var unit_windSpeed = "mph";
+          var unit_visibility = "mi";
+          var unit_pressure = "mb";
+        }
+        else if ($('#input_C').is(':checked')) {
+          var unit_fc = "C";
+          var unit_windSpeed = "m/s";
+          var unit_visibility = "km";
+          var unit_pressure = "hPa";
+        }
+
+        var str_Facebook_title = "Current Weather in " + city + ', ' + state;
+        var str_Facebook_content = summary + ', ' + temperature + '&deg;' + unit_fc;
+        var precipitationStr = "";
+        if (precipIntensity < 0.002){
+          precipitationStr = "None";
+        } else if (precipIntensity < 0.017) {
+          precipitationStr = "Very Light";
+        } else if (precipIntensity < 0.1) {
+          precipitationStr = "Light";
+        } else if (precipIntensity < 0.4) {
+          precipitationStr = "Moderate";
+        } else if (precipIntensity >= 0.4) {
+          precipitationStr = "Heavy";
+        }
+
+        function GetIconStr(icon) {
+          if (icon === "clear-day") {
+            icon = "clear";
+          }
+          else if (icon === "clear-night") {
+            icon = "clear_night";
+          }
+          else if (icon === "partly-cloudy-day") {
+            icon = "cloud_day";
+          }
+          else if (icon === "partly-cloudy-night") {
+            icon = "cloud_night";
+          }
+          icon = icon + ".png";
+          return icon;
+        }
+
+        function GetResult(num, unit) {
+          if (isNaN(num) || typeof(num) == undefined) {
+            return "N.A.";
+          }
+          return num + unit;
+        }
+        icon = GetIconStr(icon);
+        var html =
+        ' <ul class = "nav nav-tabs" role = "tablist">\
+            <li role = "presentation" class = "active"><a href = "#tab_rightnow" aria-controls = "tab_rightnow" role = "tab" data-toggle = "tab">Right Now</a></li>\
+            <li role = "presentation"><a href = "#tab_next24hours" aria-controls = "tab_next24hours" role = "tab" data-toggle = "tab">Next 24 Hours</a></li>\
+            <li role = "presentation"><a href = "#tab_next7days" aria-controls = "tab_next7days" role = "tab" data-toggle = "tab">Next 7 Days</a></li>\
+          </ul>\
+          <div class = "tab-content">\
+            <div role = "tabpanel" class = "tab-pane fade in active" id = "tab_rightnow">\
+              <div class = "col-sm-6">\
+                <div class = "row tab1_title">\
+                  <div class = "col-sm-6 align_center">\
+                    <img src = \"images/' + icon + '\" height = "150" width = "150" ></img>\
+                  </div>\
+                  <div class = "col-sm-6">\
+                    <div>\
+                      <center>\
+                        <font class = "white bold">' + summary + ' in ' + city + ', ' + state + '</font>\
+                      </center>\
+                    </div>\
+                    <div>\
+                      <center>\
+                        <font class = "white bold huge">' + temperature + '</font>\
+                        <font class = "white bold small">&deg; ' + unit_fc + '</font>\
+                      </center>\
+                    </div>\
+                    <div class = "align_center" style = "height: 40px;">\
+                      <a href = "javascript:ShareFacebook(\'' + str_Facebook_title + '\',\'' + str_Facebook_content + '\',\'' + icon + '\');" style = "float: right;"><img src = "images/fb_icon.png" width = "35" height = "35"></a>\
+                      <br />\
+                      <font class = "blue">L: ' + temperatureMin + '&deg;</font> | <font class = "green">H: ' + temperatureMax + '&deg;</font>\
+                    </div>\
+                  </div>\
+                </div>\
+                <div class = "row">\
+                  <table class = "table table-responsive">\
+                    <tr class = "tab1_oddline">\
+                      <td class = "col-sm-6">\
+                        Precipitation\
+                      </td>\
+                      <td class = "col-sm-6">\
+                        ' + precipitationStr + '\
+                      </td>\
+                    </tr>\
+                    <tr class = "tab1_evenline">\
+                      <td class = "col-sm-6">\
+                        Chance of Rain\
+                      </td>\
+                      <td class = "col-sm-6">\
+                        ' + precipProbability + '%\
+                      </td>\
+                    </tr>\
+                    <tr class = "tab1_oddline">\
+                      <td class = "col-sm-6">\
+                        Wind Speed\
+                      </td>\
+                      <td class = "col-sm-6">\
+                        ' + GetResult(windSpeed, ' ' + unit_windSpeed) + '\
+                      </td>\
+                    </tr>\
+                    <tr class = "tab1_evenline">\
+                      <td class = "col-sm-6">\
+                        Dew Point\
+                      </td>\
+                      <td class = "col-sm-6">\
+                        ' + GetResult(dewPoint, ' &deg;' + unit_fc) + '\
+                      </td>\
+                    </tr>\
+                    <tr class = "tab1_oddline">\
+                      <td class = "col-sm-6">\
+                        Humidity\
+                      </td>\
+                      <td class = "col-sm-6">\
+                        ' + GetResult(humidity, '%') + '\
+                      </td>\
+                    </tr>\
+                    <tr class = "tab1_evenline">\
+                      <td class = "col-sm-6">\
+                        Visibility\
+                      </td>\
+                      <td class = "col-sm-6">\
+                        ' + GetResult(visibility, ' ' + unit_visibility) + '\
+                      </td>\
+                    </tr>\
+                    <tr class = "tab1_oddline">\
+                      <td class = "col-sm-6">\
+                        Sunrise\
+                      </td>\
+                      <td class = "col-sm-6">\
+                        ' + sunriseStr + '\
+                      </td>\
+                    </tr>\
+                    <tr class = "tab1_evenline">\
+                      <td class = "col-sm-6">\
+                        Sunset\
+                      </td>\
+                      <td class = "col-sm-6">\
+                        ' + sunsetStr + '\
+                      </td>\
+                    </tr>\
+                  </table>\
+                </div>\
+              </div>\
+              <div class = "col-sm-6" id = "div_map" style = "height:500px">\
+              </div>\
+            </div>\
+            <div role = "tabpanel" class = "tab-pane fade bgc_white" id = "tab_next24hours">\
+              <table class = "table table-responsive tab2_header">\
+                <tr>\
+                  <th class = "align_center" width = "20%">Time</th>\
+                  <th class = "align_center" width = "20%">Summary</th>\
+                  <th class = "align_center" width = "20%">Cloud Cover</th>\
+                  <th class = "align_center" width = "20%">Temp (&deg;' + unit_fc + ')</th>\
+                  <th class = "align_center" width = "20%">View Details</th>\
+                </tr>\
+              </table>';
+            for (var i = 0; i < 24; i++) {
+              html += '\
+                <table class = "table table-responsive tab2_contenttable">\
+                  <tr>\
+                    <td class = "align_center" width = "20%">' + output.hourly.data[i].time + '</td>\
+                    <td class = "align_center" width = "20%"><img width = "55" height = "40" src = "images/' + GetIconStr(output.hourly.data[i].icon) + '"</td>\
+                    <td class = "align_center" width = "20%">' + GetResult(Math.round(output.hourly.data[i].cloudCover * 100), '%') + '</td>\
+                    <td class = "align_center" width = "20%">' + GetResult(Math.round(output.hourly.data[i].temperature * 100) / 100.0, '') + '</td>\
+                    <td class = "align_center" width = "20%">\
+                      <a data-toggle = "collapse" href = "#tab2_collapse' + i + '">\
+                        <span class = "glyphicon glyphicon-plus"></span>\
+                      </a>\
+                    </td>\
+                  </tr>\
+                </table>\
+                  \
+                  <div class = "collapse collapsed_div" id = "tab2_collapse' + i + '">\
+                    <div class = "well">\
+                      <div class = "table-responsive">\
+                        <table class = "table tab2_collapsed_table">\
+                          <tr class = "tab2_collapsed_table_header">\
+                            <th class = "align_center" width = "25%">Wind</th>\
+                            <th class = "align_center" width = "25%">Humidity</th>\
+                            <th class = "align_center" width = "25%">Visibility</th>\
+                            <th class = "align_center" width = "25%">Pressure</th>\
+                          </tr>\
+                          <tr>\
+                            <td class = "align_center">' + GetResult(output.hourly.data[i].windSpeed, unit_windSpeed) + '</td>\
+                            <td class = "align_center">' + GetResult(Math.round(output.hourly.data[i].humidity * 100), '%') + '</td>\
+                            <td class = "align_center">' + GetResult(output.hourly.data[i].visibility, unit_visibility) + '</td>\
+                            <td class = "align_center">' + GetResult(output.hourly.data[i].pressure, unit_pressure) + '</td>\
+                          </tr>\
+                        </table>\
+                      </div>\
+                    </div>\
+                  </div>\
+                ';
+            }
+            html += '\
+              </table>\
+            </div>\
+            <div role = "tabpanel" class = "tab-pane fade" id = "tab_next7days">\
+              <div class = "tab3_bgc">\
+                <div class = "col-sm-offset-3">';
+            var weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+            for (var i = 1; i <= 7; i++) {
+              var date = new Date(output.daily.data[i].time * 1000);
+              var temperatureMin = Math.round(output.daily.data[i].temperatureMin);
+              var temperatureMax = Math.round(output.daily.data[i].temperatureMax);
+              html += '\
+                  <div type = "" class = "col-sm-1 tab3_tuple tab3_tuple' + i + ' no_padding" data-toggle = "modal" data-target = "#modal' + i + '">\
+                    <center>\
+                      <p><font class = "tab3_weekdays">' + weekDays[date.getDay()] + '</font></p>\
+                      <p><font class = "tab3_day">' + months[date.getMonth()] + ' ' + date.getDate() + '</font></p>\
+                      <img src = "images/' + GetIconStr(output.daily.data[i].icon) + '" width = "70" height = "70" class = "img-responsive">\
+                      <p><font class = "tab3_temp_title">Min<br />Temp</font></p>\
+                      <p><font class = "tab3_temp">' + GetResult(temperatureMin, '&deg;') + '</font></p>\
+                      <p><font class = "tab3_temp_title">Max<br />Temp</font></p>\
+                      <p><font class = "tab3_temp">' + GetResult(temperatureMax, '&deg;') + '</font></p>\
+                    </center>\
+                  </div>\
+                  <div class = "modal fade" id = "modal' + i + '" tabindex = "-1" role = "dialog" aria-labelledby = "myModelLabel">\
+                    <div class = "modal-dialog" role = "document">\
+                      <div class = "modal-content">\
+                        <div class = "modal-header">\
+                          <button type = "button" class = "close" data-dismiss = "modal" aria-label = "Close"><span aria-hidden = "true">&times;</span></button>\
+                          <h4 class = "modal-title" id = "myModelLabel">Weather in ' + city + ' on ' +  months[date.getMonth()] + ' ' + date.getDate() + '</h4>\
+                        </div>\
+                        <div class = "modal-body">\
+                          <div align = "center">\
+                            <img src = "images/' + GetIconStr(output.daily.data[i].icon) + '" width = "150" height = "150" class = "img-responsive">\
+                            <br />\
+                            <h3>' + weekDays[date.getDay()] + ': <font color = "orange">' + output.daily.data[i].summary + '</font></h3>\
+                            <div class = "row">\
+                              <div class = "col-sm-4">\
+                                <h4>Sunrise Time</h4>' + output.daily.data[i].sunriseTime + '\
+                              </div>\
+                              <div class = "col-sm-4">\
+                                <h4>Sunset Time</h4>' + output.daily.data[i].sunsetTime + '\
+                              </div>\
+                              <div class = "col-sm-4">\
+                                <h4>Humidity</h4>' + GetResult(Math.round(output.daily.data[i].humidity * 100), '%') + '\
+                              </div>\
+                              <div class = "col-sm-4">\
+                                <h4>Wind Speed</h4>' + GetResult(Math.round(100 * output.daily.data[i].windSpeed) / 100.0, unit_windSpeed) + '\
+                              </div>\
+                              <div class = "col-sm-4">\
+                                <h4>Visibility</h4>' + GetResult(Math.round(100 * output.daily.data[i].visibility) / 100.0, unit_visibility) + '\
+                              </div>\
+                              <div class = "col-sm-4">\
+                                <h4>Sunrise Time</h4>' + GetResult(Math.round(100 * output.daily.data[i].pressure) / 100.0, unit_pressure) + '\
+                              </div>\
+                            </div>\
+                          </div>\
+                        </div>\
+                        <div class = "modal-footer">\
+                          <button type = "button" class = "btn btn-default" data-dismiss = "modal">Close</button>\
+                        </div>\
+                      </div>\
+                    </div>\
+                  </div>\
+              ';
+            }
+            html += '\
+                </div>\
+              </div>\
+            </div>\
+          </div>';
+
+        document.getElementById('div_result').innerHTML = html;
+        ShowMap(lat, lng);
+      }
+
+      function ShareFacebook(title, content, icon) {
+        FB.ui({
+          method: 'feed',
+          name: title,
+          description: content,
+          caption: 'WEATHER INFORMATION FROM FORECAST.IO',
+          display: 'popup',
+          link: 'http://forecast.io/',
+          picture: 'http://downloads-env.elasticbeanstalk.com/images/' + icon
+        },
+        function(response) {
+          if (response && response.post_id) {
+            alert("Posted Successfully");
+          }
+          else {
+            alert("Not Posted");
+          }
+        });
+      }
+
+      function ShowMap(lat, lng) {
+        var lonlat = new OpenLayers.LonLat(lng, lat);
+        var map = new OpenLayers.Map("div_map");
+
+        var mapnik = new OpenLayers.Layer.OSM();
+        var layer_cloud = new OpenLayers.Layer.XYZ(
+            "clouds",
+            "http://${s}.tile.openweathermap.org/map/clouds/${z}/${x}/${y}.png",
+            {
+              isBaseLayer: false,
+              opacity: 0.7,
+              sphericalMercator: true
+            }
+        );
+
+        var layer_precipitation = new OpenLayers.Layer.XYZ(
+            "precipitation",
+            "http://${s}.tile.openweathermap.org/map/precipitation/${z}/${x}/${y}.png",
+            {
+              isBaseLayer: false,
+              opacity: 0.7,
+              sphericalMercator: true
+            }
+        );
+        var googleProjection = new OpenLayers.Projection("EPSG:900913");
+        var geoProjection = new OpenLayers.Projection("EPSG:4326");
+        map.addLayers([mapnik, layer_precipitation, layer_cloud]);
+        map.setCenter(lonlat.transform(geoProjection, googleProjection), 10);
+      }
+/*
+      function ShowMap(lat, lng) {
+        var map = new ol.Map({
+          target: 'div_map',
+          layers: [
+            new ol.layer.Tile({
+              source: new ol.source.MapQuest({layer: 'osm'})
+            })
+          ],
+          view: new ol.View({
+            center: ol.proj.fromLonLat([lng, lat]),
+            zoom: 10
+          })
+        })
+      }
+*/
+    </script>
+  </head>
+  <body onload = "WriteStates()">
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId: '932113826825779',
+          xfbml: true,
+          version: 'v2.5'
+        });
+      };
+      (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+      console.log("Facebook script loaded");
+
+    </script>
+    <div class = "container">
+      <div class = "title">
+        <h2>Forecast Search</h2>
+      </div>
+      <div id = "board">
+        <h5 id = "occupier">.</h5>
+        <form id = "input_form" method = "GET" action = "back_end.php" onsubmit="return submitForm() && sendAjaxRequest();" class = "form-inline" role = "form" data-toggle = "validate">
+
+          <div id = "div_sa" class = "form-group">
+            <label for = "input_sa" id = "label_sa">
+              <font class = "white_1">Street Address:</font>
+              <font class = "red_1">*</font>
+            </label>
+            <br />
+            <input type = "text" id = "input_sa" name = "input_sa" onchange = "checkSA()" onkeyup = "checkSA()" placeholder = "Enter street address" class = "form-control" size = "40">
+            <p hidden id = "alert_sa"><font class = "red_1">Please enter the street address</font></p>
+          </div>
+
+          <div id = "div_city" class = "form-group">
+            <label for = "input_city" id = "label_city">
+              <font class = "white_1">City:</font>
+              <font class = "red_1">*</font>
+            </label>
+            <br />
+            <input type = "text" id = "input_city" name = "input_city" onchange = "checkCity()" onkeyup = "checkCity()" placeholder = "Enter the city name" class = "form-control" size = "15">
+            <p hidden id = "alert_city"><font class = "red_1">Please enter the city</font></p>
+          </div>
+
+          <div id = "div_states" class = "form-group">
+            <label for = "input_states" id = "label_states">
+              <font class = "white_1">State:</font>
+              <font class = "red_1">*</font>
+            </label>
+            <br />
+            <div id = "div_select">
+            </div>
+          </div>
+
+          <div id = "div_degree" class = "form-group">
+            <label for = "input_FC" id = "label_degree">
+              <font class = "white_1">Degree:</font>
+              <font class = "red_1">*</font>
+            </label>
+            <br />
+            <input type = "radio" value = "Fahrenheit" name = "input_FC" id = "input_F" checked ><font class = "white_2"> Fahrenheit</font></input>
+            <input type = "radio" value = "Celsius" name = "input_FC" id = "input_C"><font class = "white_2"> Celsius</font></input>
+          </div>
+
+          <div id = "div_buttons" class = "form-group pull-right">
+            <div>
+              <br />
+              <button type="submit" name="submit" id="btn_submit" onclick = "" class="btn btn-primary">
+                <span class='glyphicon glyphicon-search'></span> Search
+              </button>
+              <button type="reset" name="clear" id="btn_clear" class="btn btn-default" onclick="resetInputs()">
+                <span class='glyphicon glyphicon-refresh'> Clear
+              </button>
+              <input type = "hidden" id = "input_submitted" value = "0">
+              <input type = "hidden" id = "input_submit_clicked" value = "0">
+              <input type = "hidden" id = "input_unit" name = "input_unit" value = "us">
+              <input type = "hidden" id = "filled_sa" value = "0">
+              <input type = "hidden" id = "filled_city" value = "0">
+              <input type = "hidden" id = "filled_states" value = "0">
+            </div>
+          </div>
+          <div class = "row" id = "div_pb">
+            <div class = "pull-right">
+              <font class = "white_2" style = "font-size: 14px; color: white">Powered by: </font><a href = "http://forecast.io/"><img src = "images/forecast_logo.png" style = "width: 100px; height: 100%"></a>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <hr id = "line">
+
+      <div id = "div_result">
+      </div>
+    </div>
+    <script type="text/javascript">
+      $.validator.addMethod('valueSANotEmpty', function(value, element, param) {
+        return $('#input_submit_clicked').val() !== "1" || param != value;
+        //return param != value;
+      }, "Please select a state");
+      $.validator.addMethod('valueCityNotEmpty', function(value, element, param) {
+        //return $('#input_submit_clicked').val() !== "1" || param != value;
+        return $('#input_submit_clicked').val() !== "1" || param != value;
+      }, "Please select a state");
+      $.validator.addMethod('valueNotEquals', function(value, element, param) {
+        //return $('#input_submit_clicked').val() !== "1" || param != value;
+        return $('#input_submit_clicked').val() !== "1" || param != value;
+      }, "Please select a state");
+      $('#input_form').validate({
+        rules: {
+          input_sa: {
+            //required: true
+            valueSANotEmpty: ""
+          },
+          input_city: {
+            //required: true
+            valueCityNotEmpty: ""
+          },
+          input_states: {
+            valueNotEquals: "Empty"
+          }
+        },
+        wrapper: "div",
+        messages: {
+          input_sa: "Please enter the street address",
+          input_city: "Please enter the city",
+          input_states: {
+            valueNotEquals: "Please select a state"
+          }
+        },
+        errorPlacement: function(err, element) {
+          err.insertAfter(element);
+          err.css('color', 'red');
+          err.css('font-weight', 'bold');
+        },
+        submitHandler: function(form) {
+          sendAjaxRequest();
+          $('input_submitted').val("1");
+        }
+      });
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
